@@ -151,6 +151,10 @@ const useOAuth2 = <TData = AuthTokenPayload>(props: Oauth2Props<TData>) => {
 		responseType === 'code' && props.exchangeCodeForTokenServerURL;
 	const exchangeCodeForTokenMethod = responseType === 'code' && props.exchangeCodeForTokenMethod;
 
+	const logout = useCallback(() => {
+		setData(null);
+	}, [setData]);
+
 	const getAuth = useCallback(() => {
 		// 1. Init
 		setUI({
@@ -214,6 +218,8 @@ const useOAuth2 = <TData = AuthTokenPayload>(props: Oauth2Props<TData>) => {
 							await onSuccess(payload);
 						}
 					}
+					// Clear stuff ...
+					cleanup(intervalRef, popupRef, handleMessageListener);
 				}
 			} catch (genericError: any) {
 				console.error(genericError);
@@ -221,7 +227,6 @@ const useOAuth2 = <TData = AuthTokenPayload>(props: Oauth2Props<TData>) => {
 					loading: false,
 					error: genericError.toString(),
 				});
-			} finally {
 				// Clear stuff ...
 				cleanup(intervalRef, popupRef, handleMessageListener);
 			}
@@ -261,9 +266,10 @@ const useOAuth2 = <TData = AuthTokenPayload>(props: Oauth2Props<TData>) => {
 		onError,
 		setUI,
 		setData,
+		data,
 	]);
 
-	return { data, loading, error, getAuth };
+	return { data, loading, error, getAuth, logout };
 };
 
 export default useOAuth2;
