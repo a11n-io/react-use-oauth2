@@ -152,7 +152,7 @@ const useOAuth2 = <TData = AuthTokenPayload>(props: Oauth2Props<TData>) => {
 	const exchangeCodeForTokenMethod = responseType === 'code' && props.exchangeCodeForTokenMethod;
 
 	const logout = useCallback(() => {
-		setData(null);
+		return () => setData(null);
 	}, [setData]);
 
 	const getAuth = useCallback(() => {
