@@ -202,6 +202,7 @@ const useOAuth2 = <TData = AuthTokenPayload>(props: Oauth2Props<TData>) => {
 									redirectUri
 								),
 								{
+									credentials: 'include',
 									method:
 										exchangeCodeForTokenMethod ||
 										DEFAULT_EXCHANGE_CODE_FOR_TOKEN_METHOD,
