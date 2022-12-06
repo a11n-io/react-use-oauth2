@@ -31,6 +31,7 @@ export type ResponseTypeBasedProps<TData> =
 	  };
 
 export type Oauth2Props<TData = AuthTokenPayload> = {
+	initialUrl: string;
 	authorizeUrl: string;
 	clientId: string;
 	redirectUri: string;
@@ -40,6 +41,7 @@ export type Oauth2Props<TData = AuthTokenPayload> = {
 } & ResponseTypeBasedProps<TData>;
 
 const enhanceAuthorizeUrl = (
+	initialUrl: string,
 	authorizeUrl: string,
 	clientId: string,
 	redirectUri: string,
@@ -57,7 +59,7 @@ const enhanceAuthorizeUrl = (
 		...extraQueryParametersRef.current,
 	});
 
-	return `${authorizeUrl}?${query}`;
+	return `${initialUrl}?redirect=${encodeURIComponent(`${authorizeUrl}?${query}`)}`;
 };
 
 // https://medium.com/@dazcyril/generating-cryptographic-random-state-in-javascript-in-the-browser-c538b3daae50
@@ -126,6 +128,7 @@ const formatExchangeCodeForTokenServerURL = (
 
 const useOAuth2 = <TData = AuthTokenPayload>(props: Oauth2Props<TData>) => {
 	const {
+		initialUrl,
 		authorizeUrl,
 		clientId,
 		redirectUri,
@@ -169,6 +172,7 @@ const useOAuth2 = <TData = AuthTokenPayload>(props: Oauth2Props<TData>) => {
 		// 3. Open popup
 		popupRef.current = openPopup(
 			enhanceAuthorizeUrl(
+				initialUrl,
 				authorizeUrl,
 				clientId,
 				redirectUri,
@@ -202,7 +206,6 @@ const useOAuth2 = <TData = AuthTokenPayload>(props: Oauth2Props<TData>) => {
 									redirectUri
 								),
 								{
-									credentials: 'include',
 									method:
 										exchangeCodeForTokenMethod ||
 										DEFAULT_EXCHANGE_CODE_FOR_TOKEN_METHOD,
