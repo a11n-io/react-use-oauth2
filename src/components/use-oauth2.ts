@@ -85,6 +85,8 @@ const openPopup = (url: string) => {
 	// center the pop-up over the parent window.
 	const top = window.outerHeight / 2 + window.screenY - POPUP_HEIGHT / 2;
 	const left = window.outerWidth / 2 + window.screenX - POPUP_WIDTH / 2;
+	// eslint-disable-next-line no-console
+	console.log('Opening popup:', url);
 	return window.open(
 		url,
 		'OAuth2 Popup',
